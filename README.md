@@ -4,14 +4,15 @@ A REST API backend for a personal blog, built to power the blog section of a per
 
 ## Tech Stack
 
-| Layer        | Technology       | Purpose                                     |
-| ------------ | ---------------- | ------------------------------------------- |
-| Runtime      | Node.js          | JavaScript runtime for the server           |
-| Framework    | Express 5        | HTTP routing and REST API                    |
-| Database     | MongoDB Atlas    | Cloud-hosted document database              |
-| ODM          | Mongoose 9       | Schema modeling and queries for MongoDB     |
-| Dev tooling  | Nodemon          | Auto-restart the server during development  |
-| Config       | dotenv           | Load secrets and settings from `.env`       |
+| Layer        | Technology         | Purpose                                     |
+| ------------ | ------------------ | ------------------------------------------- |
+| Runtime      | Node.js            | JavaScript runtime for the server           |
+| Framework    | Express 5          | HTTP routing and REST API                    |
+| Database     | MongoDB Atlas      | Cloud-hosted document database              |
+| ODM          | Mongoose 9         | Schema modeling and queries for MongoDB     |
+| API docs     | Swagger UI + JSDoc | OpenAPI 3.0 docs served at `/api-docs`      |
+| Dev tooling  | Nodemon            | Auto-restart the server during development  |
+| Config       | dotenv             | Load secrets and settings from `.env`       |
 
 All packages are CommonJS modules.
 
@@ -28,6 +29,7 @@ All packages are CommonJS modules.
 ```
 blog-backend/
 ├── config.js        # Loads .env and connects to MongoDB via Mongoose
+├── swagger.js       # OpenAPI config; serves Swagger UI at /api-docs
 ├── server.js        # Express app entry point; starts the HTTP server
 ├── .env             # Local secrets (gitignored) — MONGODB_URI, PORT
 ├── .env.example     # Template for copying to .env
@@ -80,6 +82,12 @@ Server running on port 5000
 
 Then visit `http://localhost:5000` — the root route returns `API is running`.
 
+## API Documentation
+
+Swagger UI is served at `http://localhost:5000/api-docs` and is generated from JSDoc `@swagger` annotations in the route files via `swagger-jsdoc`. As routes are added, annotate them so the docs stay in sync.
+
+> Note: decide whether `/api-docs` should stay public in production or be gated to development only (`process.env.NODE_ENV`).
+
 ## Security Notes
 
 - **`.env` is gitignored.** Never commit real MongoDB credentials.
@@ -89,8 +97,11 @@ Then visit `http://localhost:5000` — the root route returns `API is running`.
 
 ## Roadmap
 
+- [x] Server startup, env config, and MongoDB connection
+- [x] Swagger UI docs at `/api-docs`
 - [ ] Blog post model and schema (title, content, tags, date, slug)
-- [ ] CRUD routes for posts
+- [ ] CRUD routes for posts, annotated for Swagger
 - [ ] Public read endpoints for the portfolio frontend
 - [ ] Admin/write protection for creating and editing posts
+- [ ] Automated tests (Jest + Supertest + mongodb-memory-server)
 - [ ] Deployment to a hosting provider
