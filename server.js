@@ -1,4 +1,5 @@
 require("dotenv").config();
+const { swaggerUi, specs } = require('./swagger');
 const express = require("express");
 const connectDB = require("./config");
 
@@ -7,6 +8,8 @@ const app = express();
 connectDB();
 
 app.use(express.json());
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 app.get("/", (req, res) => {
     res.send("API is running");
